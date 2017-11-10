@@ -1,7 +1,6 @@
 const fs = require('fs')
 const puppeteer = require('puppeteer')
-describe('craw', function () {
-    this.timeout(5000)
+describe('craw', () => {
     it('google', async () => {
         if (!fs.existsSync('report')) {
             fs.mkdirSync('report')
@@ -19,7 +18,7 @@ describe('craw', function () {
         })
         fs.writeFileSync('report/google.txt', body)
         await page.screenshot({ path: 'report/google.png', fullPage: true })
-    
+
         await browser.close()
-    })
+    }).timeout(5000)
 })
