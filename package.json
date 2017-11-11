@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "craw": "node bin/deleteFolder.js report && mocha src/*.js"
+    "craw": "node bin/deleteFolder.js report && mocha src/runner.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,6 @@
   "homepage": "https://github.com/KenFront/puppeteer_crawler#readme",
   "dependencies": {
     "mocha": "^4.0.1",
-    "puppeteer": "^0.12.0"
+    "puppeteer": "^0.13.0"
   }
 }
