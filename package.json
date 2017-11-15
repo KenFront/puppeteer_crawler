@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "craw": "node bin/deleteFolder.js report && mocha src/runner.js"
+    "craw": "node bin/deleteFolder.js report && mocha src/runner.js --no-timeouts"
   },
   "repository": {
     "type": "git",

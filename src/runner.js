@@ -18,7 +18,7 @@ describe('craw', () => {
         },
         text: 'google.txt',
         img: 'google.png'
-    })).timeout(5000)
+    }))
     it('yahoo', craw.bind(this, {
         url: 'https://tw.search.yahoo.com/search?p=javascript',
         script: () => {
@@ -32,7 +32,7 @@ describe('craw', () => {
         },
         text: 'yahoo.txt',
         img: 'yahoo.png'
-    })).timeout(5000)
+    }))
     it('msn', craw.bind(this, {
         url: 'https://www.bing.com/search?q=javascript',
         script: () => {
@@ -46,5 +46,5 @@ describe('craw', () => {
         },
         text: 'msn.txt',
         img: 'msn.png'
-    })).timeout(5000)
+    }))
 })
