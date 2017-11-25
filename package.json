@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "craw": "node bin/deleteFolder.js report && mocha src/runner.js --no-timeouts"
+    "seo": "node bin/deleteFolder.js report && mocha src/seo/runner.js --no-timeouts",
+    "amazon": "node bin/deleteFolder.js report && node src/amazon/runner.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/KenFront/puppeteer_crawler#readme",
   "dependencies": {
+    "cross-spawn": "^5.1.0",
     "mocha": "^4.0.1",
     "puppeteer": "^0.13.0"
   }
