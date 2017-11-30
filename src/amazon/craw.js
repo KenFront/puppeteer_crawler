@@ -3,6 +3,7 @@ const puppeteer = require('puppeteer')
 const config = require('./config')
 const nowTime = new Date()
 const fileName = `d${nowTime.getDate()}_h${nowTime.getHours()}_m${nowTime.getMinutes()}`
+
 const craw = async ({ url, getMaxPage, getLink, getContent, fileType, imgType }) => {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
@@ -19,9 +20,10 @@ const craw = async ({ url, getMaxPage, getLink, getContent, fileType, imgType })
                 const content = await page.evaluate(getContent)
                 const count = require('../util/getOrder').count
                 if (content.title.indexOf(config.keyword) > -1 &&
-                    content.logistic.indexOf(config.logistic) > -1 &&
+                    content.solder.indexOf(config.solder) > -1 &&
                     content.price >= config.minPrice &&
                     content.price <= config.maxPrice) {
+                    console.log('找到了')
                     stock += `${count}：\n link：${content.link}\n price：${content.price}\n\n\n`
                     await page.screenshot({ path: `${config.output}${fileName}/amazon_${count}${imgType}`, fullPage: false })
                 }
@@ -35,9 +37,9 @@ describe('craw', () => {
     before(() => {
         if (!fs.existsSync(config.output)) {
             fs.mkdirSync(config.output)
-            if (!fs.existsSync(config.output + fileName)) {
-                fs.mkdirSync(config.output + fileName)
-            }
+        }
+        if (!fs.existsSync(config.output + fileName)) {
+            fs.mkdirSync(config.output + fileName)
         }
     })
     it('amazon', craw.bind(this, {
@@ -59,14 +61,14 @@ describe('craw', () => {
         getContent: () => {
             const link = location.href
             const title = document.getElementById('productTitle')
-            const logistic = document.getElementById('merchant-info')
+            const solder = document.querySelector('#merchant-info a')
             const price = document.getElementById('priceblock_ourprice')
             let titleVal = title ? title.innerText : ''
-            let logisticVal = logistic ? logistic.innerText : ''
-            let priceVal = price ? price.innerText.replace('￥ ','').replace(/\,/,'') : ''
+            let solderVal = solder ? solder.innerText : ''
+            let priceVal = price ? price.innerText.replace('￥ ', '').replace(/\,/, '') : ''
             return {
                 title: titleVal,
-                logistic: logisticVal,
+                solder: solderVal,
                 price: priceVal,
                 link
             }
