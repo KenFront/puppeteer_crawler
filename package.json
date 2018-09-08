@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "prettier --write 'src/**/*.{js,ts,tsx,scss}' && eslint 'src/**/*.{js,jsx}'",
     "seo": "node bin/deleteFolder.js report && mocha src/seo/runner.js --no-timeouts",
     "amazon": "node bin/deleteFolder.js report && node src/amazon/runner.js"
   },
@@ -17,9 +18,65 @@
     "url": "https://github.com/KenFront/puppeteer_crawler/issues"
   },
   "homepage": "https://github.com/KenFront/puppeteer_crawler#readme",
-  "dependencies": {
-    "cross-spawn": "^5.1.0",
-    "mocha": "^4.0.1",
-    "puppeteer": "^0.13.0"
+  "dependencies": {},
+  "devDependencies": {
+    "babel-eslint": "^8.2.6",
+    "eslint": "^5.5.0",
+    "eslint-config-google": "^0.9.1",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-prettier": "^2.6.2",
+    "mocha": "^5.2.0",
+    "prettier": "^1.14.2",
+    "puppeteer": "^1.8.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "google"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint",
+      "ecmaVersion": 2017,
+      "sourceType": "module"
+    },
+    "plugins": [
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "semi": false,
+          "singleQuote": true,
+          "trailingComma": "all",
+          "arrowParens": "always"
+        }
+      ],
+      "object-curly-spacing": [
+        2,
+        "always"
+      ],
+      "semi": [
+        2,
+        "never"
+      ],
+      "semi-spacing": 2,
+      "max-len": "off",
+      "require-jsdoc": "off",
+      "no-invalid-this": "off",
+      "quote-props": [
+        "error",
+        "as-needed"
+      ]
+    }
+  },
+  "eslintIgnore": [
+    "report/**/",
+    "node_modules/**/"
+  ],
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always"
   }
 }
