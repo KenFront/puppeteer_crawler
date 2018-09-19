@@ -3,7 +3,12 @@ const puppeteer = require('puppeteer')
 const config = require('./config')
 const nowTime = new Date()
 const fileName = `d${nowTime.getDate()}_h${nowTime.getHours()}_m${nowTime.getMinutes()}`
-
+// const opts = {
+//   headless: false,
+//   slowMo: 100,
+//   timeout: 10000,
+//   args: ['--start-fullscreen', '--disable-infobars'],
+// }
 const craw = async ({
   url,
   getMaxPage,
@@ -19,7 +24,7 @@ const craw = async ({
   let stock = ''
   for (let p = 1; p <= Number(maxPage); p++) {
     console.log(`${url}&page=${p}`)
-    await page.goto(`${url}page=${p}`)
+    await page.goto(`${url}&page=${p}`)
     const allLink = await page.evaluate(getLink)
     for (let i in allLink) {
       if (
@@ -29,12 +34,31 @@ const craw = async ({
         await page.goto(allLink[i])
         const content = await page.evaluate(getContent)
         const count = require('../util/getOrder').count
-        if (
-          content.title.indexOf(config.keyword) > -1 &&
-          content.solder.indexOf(config.solder) > -1 &&
-          content.price >= config.minPrice &&
-          content.price <= config.maxPrice
-        ) {
+        const check = () => {
+          const res = []
+          if (config.keyword.length > 0) {
+            res.push(
+              config.keyword.some((e) =>
+                new RegExp(e.trim().toLowerCase()).test(
+                  content.title.trim().toLowerCase(),
+                ),
+              ),
+            )
+          }
+          if (config.solder.length > 0) {
+            res.push(
+              config.solder.some((e) =>
+                new RegExp(e.trim().toLowerCase()).test(
+                  content.solder.trim().toLowerCase(),
+                ),
+              ),
+            )
+          }
+          res.push(content.price >= config.minPrice)
+          res.push(content.price <= config.maxPrice)
+          return res.every((e) => e)
+        }
+        if (check()) {
           console.log('找到了')
           stock += `${count}：\n link：${content.link}\n price：${
             content.price
@@ -62,10 +86,14 @@ describe('craw', () => {
   it(
     'amazon',
     craw.bind(this, {
-      url: `https://www.amazon.co.jp/s/?field-keywords=${config.keyword}`,
+      url: `https://www.amazon.co.jp/s/?field-keywords=${config.searchword.replace(
+        /\s/g,
+        '+',
+      )}`,
       getMaxPage: () => {
         const dom = document.querySelector('#pagn .pagnDisabled')
-        let page = dom.innerText
+        console.log(dom)
+        let page = dom ? dom.innerText : 1
 
         return page
       },
@@ -87,7 +115,10 @@ describe('craw', () => {
         let titleVal = title ? title.innerText : ''
         let solderVal = solder ? solder.innerText : ''
         let priceVal = price
-          ? price.innerText.replace('￥ ', '').replace(/\,/, '')
+          ? price.innerText
+              .trim()
+              .replace('￥', '')
+              .replace(/\,/g, '')
           : ''
         return {
           title: titleVal,

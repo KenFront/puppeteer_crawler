@@ -1,9 +1,10 @@
 const config = {
   output: 'report/',
-  keyword: 'ニンテンドークラシックミニ',
-  solder: 'Amazon.co.jp',
-  maxPrice: 11000,
-  minPrice: 8000,
-  once: 10, // minutes
+  searchword: 'ubuntu laptop',
+  keyword: [],
+  solder: [],
+  maxPrice: 20000,
+  minPrice: 10000,
+  once: 30, // minutes
 }
 module.exports = config
