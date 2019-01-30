@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "prettier --write 'src/**/*.{js,ts,tsx,scss}' && eslint 'src/**/*.{js,jsx}'",
+    "lint": "eslint 'src/**/*.{js,jsx}'",
     "seo": "node bin/deleteFolder.js report && mocha src/seo/runner.js --no-timeouts",
     "amazon": "node bin/deleteFolder.js report && node src/amazon/runner.js"
   },
@@ -21,52 +21,44 @@
   "dependencies": {},
   "devDependencies": {
     "babel-eslint": "^8.2.6",
-    "eslint": "^5.5.0",
-    "eslint-config-google": "^0.9.1",
-    "eslint-config-prettier": "^3.0.1",
-    "eslint-plugin-prettier": "^2.6.2",
+    "eslint": "^5.12.1",
+    "eslint-config-prettier": "^3.6.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-prettier": "^2.7.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
     "mocha": "^5.2.0",
-    "prettier": "^1.14.2",
-    "puppeteer": "^1.8.0"
+    "prettier": "^1.16.2",
+    "puppeteer": "^1.11.0"
   },
   "eslintConfig": {
     "extends": [
-      "google"
+      "standard",
+      "prettier",
+      "prettier/babel",
+      "prettier/standard"
+    ],
+    "plugins": [
+      "babel",
+      "prettier",
+      "standard"
     ],
     "parserOptions": {
       "parser": "babel-eslint",
-      "ecmaVersion": 2017,
+      "ecmaVersion": 10,
       "sourceType": "module"
     },
-    "plugins": [
-      "prettier"
-    ],
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true,
+      "mocha": true
+    },
     "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "semi": false,
-          "singleQuote": true,
-          "trailingComma": "all",
-          "arrowParens": "always"
-        }
-      ],
-      "object-curly-spacing": [
-        2,
-        "always"
-      ],
-      "semi": [
-        2,
-        "never"
-      ],
-      "semi-spacing": 2,
-      "max-len": "off",
-      "require-jsdoc": "off",
-      "no-invalid-this": "off",
-      "quote-props": [
-        "error",
-        "as-needed"
-      ]
+      "prettier/prettier": "error"
     }
   },
   "eslintIgnore": [

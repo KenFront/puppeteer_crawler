@@ -29,7 +29,7 @@ const craw = async ({
     for (let i in allLink) {
       if (
         Number(i) > -1 &&
-        /^https\:\/\/www\.amazon\.co\.jp\//.test(allLink[i])
+        /^https:\/\/www\.amazon\.co\.jp\//.test(allLink[i])
       ) {
         await page.goto(allLink[i])
         const content = await page.evaluate(getContent)
@@ -118,7 +118,7 @@ describe('craw', () => {
           ? price.innerText
               .trim()
               .replace('￥', '')
-              .replace(/\,/g, '')
+              .replace(/,/g, '')
           : ''
         return {
           title: titleVal,
