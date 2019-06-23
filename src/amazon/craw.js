@@ -60,9 +60,7 @@ const craw = async ({
         }
         if (check()) {
           console.log('找到了')
-          stock += `${count}：\n link：${content.link}\n price：${
-            content.price
-          }\n\n\n`
+          stock += `${count}：\n link：${content.link}\n price：${content.price}\n\n\n`
           await page.screenshot({
             path: `${config.output}${fileName}/amazon_${count}${imgType}`,
             fullPage: false,
