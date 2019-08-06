@@ -7,10 +7,22 @@
     
 ## 2. 安裝專案內的套件
 
-    npm i
+```
+npm i
 
+git submodule sync --recursive
+
+git submodule update --init --recursive
+
+```
 ## 3. script指令(參照package.json)
 
-    npm run seo --- 爬google,yahoo,msn第一頁
+```
+npm run seo // 爬google,yahoo,msn第一頁
 
-    npm run amazon --- 爬所有符合的商品
+npm run amazon // 爬所有符合的商品
+
+```
+    
+
+    

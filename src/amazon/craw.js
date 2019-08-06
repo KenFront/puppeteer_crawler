@@ -3,12 +3,11 @@ const puppeteer = require('puppeteer')
 const config = require('./config')
 const nowTime = new Date()
 const fileName = `d${nowTime.getDate()}_h${nowTime.getHours()}_m${nowTime.getMinutes()}`
-// const opts = {
-//   headless: false,
-//   slowMo: 100,
-//   timeout: 10000,
-//   args: ['--start-fullscreen', '--disable-infobars'],
-// }
+const opts = {
+  // headless: false,
+  defaultViewport: null,
+  args: ['--disable-infobars'],
+}
 const craw = async ({
   url,
   getMaxPage,
@@ -17,7 +16,7 @@ const craw = async ({
   fileType,
   imgType,
 }) => {
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch(opts)
   const page = await browser.newPage()
   await page.goto(url)
   const maxPage = await page.evaluate(getMaxPage)
@@ -27,45 +26,41 @@ const craw = async ({
     await page.goto(`${url}&page=${p}`)
     const allLink = await page.evaluate(getLink)
     for (let i in allLink) {
-      if (
-        Number(i) > -1 &&
-        /^https:\/\/www\.amazon\.co\.jp\//.test(allLink[i])
-      ) {
-        await page.goto(allLink[i])
-        const content = await page.evaluate(getContent)
-        const count = require('../util/getOrder').count
-        const check = () => {
-          const res = []
-          if (config.keyword.length > 0) {
-            res.push(
-              config.keyword.some((e) =>
-                new RegExp(e.trim().toLowerCase()).test(
-                  content.title.trim().toLowerCase(),
-                ),
+      await page.goto(`https://www.amazon.co.jp${allLink[i]}`)
+      const content = await page.evaluate(getContent)
+      // console.log(content)
+      const count = require('../util/getOrder').count
+      const check = () => {
+        const res = []
+        if (config.keyword.length > 0) {
+          res.push(
+            config.keyword.some((e) =>
+              new RegExp(e.trim().toLowerCase()).test(
+                content.title.trim().toLowerCase(),
               ),
-            )
-          }
-          if (config.solder.length > 0) {
-            res.push(
-              config.solder.some((e) =>
-                new RegExp(e.trim().toLowerCase()).test(
-                  content.solder.trim().toLowerCase(),
-                ),
+            ),
+          )
+        }
+        if (config.solder.length > 0) {
+          res.push(
+            config.solder.some((e) =>
+              new RegExp(e.trim().toLowerCase()).test(
+                content.solder.trim().toLowerCase(),
               ),
-            )
-          }
-          res.push(content.price >= config.minPrice)
-          res.push(content.price <= config.maxPrice)
-          return res.every((e) => e)
+            ),
+          )
         }
-        if (check()) {
-          console.log('找到了')
-          stock += `${count}：\n link：${content.link}\n price：${content.price}\n\n\n`
-          await page.screenshot({
-            path: `${config.output}${fileName}/amazon_${count}${imgType}`,
-            fullPage: false,
-          })
-        }
+        res.push(content.price >= config.minPrice)
+        res.push(content.price <= config.maxPrice)
+        return res.every((e) => e)
+      }
+      if (check()) {
+        console.log('找到了')
+        stock += `${count}：\n link：${content.link}\n price：${content.price}\n\n\n`
+        await page.screenshot({
+          path: `${config.output}${fileName}/amazon_${count}${imgType}`,
+          fullPage: false,
+        })
       }
     }
   }
@@ -89,21 +84,18 @@ describe('craw', () => {
         '+',
       )}`,
       getMaxPage: () => {
-        const dom = document.querySelector('#pagn .pagnDisabled')
-        console.log(dom)
-        let page = dom ? dom.innerText : 1
+        const dom = document.querySelectorAll('#search li.a-disabled')
+        let page = dom.length > 0 ? dom[dom.length - 1].innerText : 1
 
         return page
       },
       getLink: () => {
-        const dom = document.querySelectorAll(
-          '.a-link-normal.s-access-detail-page.s-color-twister-title-link.a-text-normal',
-        )
+        const dom = document.querySelectorAll('.a-link-normal')
         let allLink = []
         dom.forEach((e) => {
           allLink.push(e.getAttribute('href'))
         })
-        return allLink
+        return allLink.filter((e) => /^\/gp\/slredirect\//.test(e))
       },
       getContent: () => {
         const link = location.href
