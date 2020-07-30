@@ -25,7 +25,7 @@ const craw = async ({
     console.log(`${url}&page=${p}`)
     await page.goto(`${url}&page=${p}`)
     const allLink = await page.evaluate(getLink)
-    for (let i in allLink) {
+    for (const i in allLink) {
       await page.goto(`https://www.amazon.co.jp${allLink[i]}`)
       const content = await page.evaluate(getContent)
       // console.log(content)
@@ -85,13 +85,13 @@ describe('craw', () => {
       )}`,
       getMaxPage: () => {
         const dom = document.querySelectorAll('#search li.a-disabled')
-        let page = dom.length > 0 ? dom[dom.length - 1].innerText : 1
+        const page = dom.length > 0 ? dom[dom.length - 1].innerText : 1
 
         return page
       },
       getLink: () => {
         const dom = document.querySelectorAll('.a-link-normal')
-        let allLink = []
+        const allLink = []
         dom.forEach((e) => {
           allLink.push(e.getAttribute('href'))
         })
@@ -102,13 +102,10 @@ describe('craw', () => {
         const title = document.getElementById('productTitle')
         const solder = document.querySelector('#merchant-info a')
         const price = document.getElementById('priceblock_ourprice')
-        let titleVal = title ? title.innerText : ''
-        let solderVal = solder ? solder.innerText : ''
-        let priceVal = price
-          ? price.innerText
-              .trim()
-              .replace('￥', '')
-              .replace(/,/g, '')
+        const titleVal = title ? title.innerText : ''
+        const solderVal = solder ? solder.innerText : ''
+        const priceVal = price
+          ? price.innerText.trim().replace('￥', '').replace(/,/g, '')
           : ''
         return {
           title: titleVal,

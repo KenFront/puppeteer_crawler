@@ -22,19 +22,19 @@
   "homepage": "https://github.com/KenFront/puppeteer_crawler#readme",
   "dependencies": {},
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-babel": "^5.3.0",
-    "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-prettier": "^3.1.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "mocha": "^7.0.1",
-    "prettier": "^1.19.1",
-    "puppeteer": "^2.1.1"
+    "mocha": "^8.0.1",
+    "prettier": "^2.0.5",
+    "puppeteer": "^5.2.1"
   },
   "eslintConfig": {
     "extends": [
@@ -45,12 +45,11 @@
     ],
     "plugins": [
       "babel",
-      "prettier",
-      "standard"
+      "standard",
+      "prettier"
     ],
     "parserOptions": {
       "parser": "babel-eslint",
-      "ecmaVersion": 10,
       "sourceType": "module"
     },
     "env": {
@@ -58,9 +57,6 @@
       "es6": true,
       "node": true,
       "mocha": true
-    },
-    "rules": {
-      "prettier/prettier": "error"
     }
   },
   "eslintIgnore": [
