@@ -5,10 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint 'src/**/*.{js,jsx}'",
-    "remove:report": "node scripts/deleteFolder.js report",
-    "upgrade:NPM": "node scripts/upgradeNPM",
-    "seo": "npm run remove:report && mocha src/seo/runner.js --no-timeouts",
-    "amazon": "npm run remove:report && node src/amazon/runner.js"
+    "upgrade": "npx npm-check-updates -u && npm i",
+    "seo": "rm -rf report && mocha src/seo/runner.js --no-timeouts",
+    "amazon": "rm -rf report && node src/amazon/runner.js"
   },
   "repository": {
     "type": "git",
